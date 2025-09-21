@@ -1,0 +1,27 @@
+<div class="app-container">
+    <!-- Header -->
+    <header class="app-header" role="banner">
+        <mat-toolbar color="primary">
+            <mat-icon class="app-icon" aria-hidden="true">inventory_2</mat-icon>
+            <span class="app-title">Article Management Dashboard</span>
+            <span class="spacer"></span>
+            <button mat-icon-button [attr.aria-label]="'Navigate to home'" matTooltip="Home" routerLink="/">
+                <mat-icon>home</mat-icon>
+            </button>
+        </mat-toolbar>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main" role="main">
+        <div class="content-wrapper">
+            <router-outlet />
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="app-footer" role="contentinfo">
+        <div class="footer-content">
+            <p>&copy; 2024 Article Management System. All rights reserved.</p>
+        </div>
+    </footer>
+</div>

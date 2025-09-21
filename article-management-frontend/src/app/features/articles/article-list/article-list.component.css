@@ -1,0 +1,337 @@
+.article-list-container {
+    padding: 0;
+    max-width: 100%;
+    margin: 0;
+}
+
+.actions-toolbar {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    text-align: center;
+}
+
+.loading-container p {
+    margin-top: 16px;
+    color: #666;
+}
+
+.error-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+    text-align: center;
+    color: #f44336;
+}
+
+.error-container mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+}
+
+.error-container p {
+    margin: 16px 0;
+    font-size: 16px;
+}
+
+.empty-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+    text-align: center;
+    color: #666;
+}
+
+.empty-container mat-icon {
+    font-size: 64px;
+    width: 64px;
+    height: 64px;
+    margin-bottom: 16px;
+    color: #ccc;
+}
+
+.empty-container h3 {
+    margin: 16px 0 8px 0;
+    font-weight: 500;
+}
+
+.empty-container p {
+    margin-bottom: 24px;
+    max-width: 400px;
+}
+
+.table-container {
+    overflow-x: auto;
+    margin-top: 16px;
+}
+
+.articles-table {
+    width: 100%;
+    min-width: 1000px;
+}
+
+.articles-table th {
+    font-weight: 600;
+    color: #333;
+}
+
+.articles-table td {
+    padding: 12px 8px;
+}
+
+.articles-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Responsive design */
+@media (max-width: 1200px) {
+    .articles-table {
+        min-width: 900px;
+    }
+}
+
+@media (max-width: 768px) {
+    .article-list-container {
+        padding: 0;
+    }
+
+    .actions-toolbar {
+        justify-content: center;
+        margin-bottom: 16px;
+    }
+
+    .table-container {
+        margin: 0 -8px;
+        border-radius: 0;
+    }
+
+    .articles-table {
+        min-width: 800px;
+        font-size: 13px;
+    }
+
+    .articles-table th,
+    .articles-table td {
+        padding: 8px 4px;
+    }
+
+    .mat-column-articleNumber,
+    .mat-column-lengthInMm,
+    .mat-column-widthInMm,
+    .mat-column-heightInMm {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .articles-table {
+        min-width: 600px;
+        font-size: 12px;
+    }
+
+    .mat-column-bicycleCategory,
+    .mat-column-material {
+        display: none;
+    }
+
+    .actions-toolbar button {
+        width: 100%;
+        max-width: 200px;
+    }
+}
+
+/* Column specific styling */
+.mat-column-articleNumber {
+    max-width: 120px;
+}
+
+.mat-column-name {
+    min-width: 150px;
+}
+
+.mat-column-articleCategory,
+.mat-column-bicycleCategory,
+.mat-column-material {
+    max-width: 140px;
+}
+
+.mat-column-lengthInMm,
+.mat-column-widthInMm,
+.mat-column-heightInMm,
+.mat-column-netWeightInGramm {
+    max-width: 100px;
+    text-align: right;
+}
+
+.mat-column-actions {
+    max-width: 120px;
+    text-align: center;
+}
+
+/* Sortable column styles */
+.sortable {
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    transition: background-color 0.2s ease;
+}
+
+.sortable:hover {
+    background-color: #f0f0f0;
+}
+
+.sortable:active {
+    background-color: #e0e0e0;
+}
+
+.sort-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    margin-left: 4px;
+    vertical-align: middle;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+}
+
+.sortable:hover .sort-icon {
+    opacity: 1;
+}
+
+.sortable .sort-icon {
+    display: inline-flex;
+    align-items: center;
+}
+
+/* Filter indicator styling */
+.filter-indicator {
+    color: #2196f3;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* Accessibility improvements */
+.articles-table th[aria-sort] {
+    position: relative;
+}
+
+.articles-table th[aria-sort]:focus {
+    outline: 2px solid #3f51b5;
+    outline-offset: -2px;
+}
+
+.articles-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.articles-table tr:hover {
+    background-color: #e3f2fd !important;
+    transition: background-color 0.2s ease;
+}
+
+/* Loading and error state improvements */
+.loading-container,
+.error-container,
+.empty-container {
+    min-height: 300px;
+}
+
+.loading-container mat-spinner {
+    margin-bottom: 16px;
+}
+
+/* Button improvements */
+.actions-toolbar button {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.2s ease, transform 0.1s ease;
+}
+
+.actions-toolbar button:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    transform: translateY(-1px);
+}
+
+.actions-toolbar button:active {
+    transform: translateY(0);
+}
+
+/* Table action buttons */
+.mat-column-actions button {
+    margin: 0 2px;
+    transition: transform 0.1s ease;
+}
+
+.mat-column-actions button:hover {
+    transform: scale(1.1);
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+    .articles-table {
+        border: 2px solid black;
+    }
+
+    .articles-table th,
+    .articles-table td {
+        border: 1px solid black;
+    }
+
+    .articles-table tr:hover {
+        background-color: yellow !important;
+        color: black;
+    }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+
+    .articles-table tr,
+    .actions-toolbar button,
+    .mat-column-actions button {
+        transition: none;
+    }
+}
+
+/* Focus management for table rows */
+.articles-table tr:focus-within {
+    outline: 2px solid #3f51b5;
+    outline-offset: -2px;
+}
+
+/* Card styling improvements */
+mat-card {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+mat-card-header {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    padding: 24px;
+}
+
+mat-card-content {
+    padding: 24px;
+}
+
+/* Table container improvements */
+.table-container {
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: white;
+}

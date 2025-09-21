@@ -1,0 +1,201 @@
+<div class="article-form-container">
+    <mat-card role="main" [attr.aria-labelledby]="'form-title'">
+        <mat-card-header>
+            <mat-card-title id="form-title">{{ formTitle }}</mat-card-title>
+            <mat-card-subtitle>
+                {{ mode === 'create' ? 'Create a new bicycle component article' : 'Update article information' }}
+            </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <!-- Error Display -->
+            <div *ngIf="error" class="error-container" role="alert" [attr.aria-label]="'Form error: ' + error">
+                <mat-icon color="warn" aria-hidden="true">error</mat-icon>
+                <span>{{ error }}</span>
+            </div>
+
+            <form [formGroup]="articleForm" (ngSubmit)="onSubmit()" class="article-form" role="form"
+                [attr.aria-labelledby]="'form-title'" novalidate>
+
+                <!-- Basic Information Section -->
+                <fieldset class="form-section" [attr.aria-labelledby]="'basic-info-title'">
+                    <legend class="section-title" id="basic-info-title">Basic Information</legend>
+
+                    <div class="form-row">
+                        <!-- Article Number -->
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Article Number</mat-label>
+                            <input matInput type="number" formControlName="articleNumber"
+                                placeholder="Enter article number"
+                                [class.mat-form-field-invalid]="hasFieldError('articleNumber')"
+                                [attr.aria-describedby]="hasFieldError('articleNumber') ? 'articleNumber-error' : null"
+                                [attr.aria-invalid]="hasFieldError('articleNumber')" required>
+                            <mat-error *ngIf="hasFieldError('articleNumber')" id="articleNumber-error">
+                                {{ getFieldError('articleNumber') }}
+                            </mat-error>
+                        </mat-form-field>
+
+                        <!-- Name -->
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Name</mat-label>
+                            <input matInput formControlName="name" placeholder="Enter article name"
+                                [class.mat-form-field-invalid]="hasFieldError('name')"
+                                [attr.aria-describedby]="hasFieldError('name') ? 'name-error' : null"
+                                [attr.aria-invalid]="hasFieldError('name')" required>
+                            <mat-error *ngIf="hasFieldError('name')" id="name-error">
+                                {{ getFieldError('name') }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </fieldset>
+
+                <!-- Categories Section -->
+                <fieldset class="form-section" [attr.aria-labelledby]="'categories-title'">
+                    <legend class="section-title" id="categories-title">Categories</legend>
+
+                    <div class="form-row">
+                        <!-- Article Category -->
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Article Category</mat-label>
+                            <input matInput formControlName="articleCategory"
+                                placeholder="Select from list or type new category"
+                                [matAutocomplete]="articleCategoryAuto"
+                                [class.mat-form-field-invalid]="hasFieldError('articleCategory')">
+                            <mat-autocomplete #articleCategoryAuto="matAutocomplete">
+                                <mat-option *ngFor="let category of filteredArticleCategories | async"
+                                    [value]="category">
+                                    {{ category }}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <mat-hint>You can select from the list or type a new category</mat-hint>
+                            <mat-error *ngIf="hasFieldError('articleCategory')">
+                                {{ getFieldError('articleCategory') }}
+                            </mat-error>
+                        </mat-form-field>
+
+                        <!-- Bicycle Category -->
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Bicycle Category</mat-label>
+                            <input matInput formControlName="bicycleCategory"
+                                placeholder="Select from list or type new bicycle category"
+                                [matAutocomplete]="bicycleCategoryAuto"
+                                [class.mat-form-field-invalid]="hasFieldError('bicycleCategory')">
+                            <mat-autocomplete #bicycleCategoryAuto="matAutocomplete">
+                                <mat-option *ngFor="let category of filteredBicycleCategories | async"
+                                    [value]="category">
+                                    {{ category }}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <mat-hint>You can select from the list or type a new bicycle category</mat-hint>
+                            <mat-error *ngIf="hasFieldError('bicycleCategory')">
+                                {{ getFieldError('bicycleCategory') }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+
+                    <div class="form-row">
+                        <!-- Material -->
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Material</mat-label>
+                            <input matInput formControlName="material"
+                                placeholder="Select from list or type new material" [matAutocomplete]="materialAuto"
+                                [class.mat-form-field-invalid]="hasFieldError('material')">
+                            <mat-autocomplete #materialAuto="matAutocomplete">
+                                <mat-option *ngFor="let material of filteredMaterials | async" [value]="material">
+                                    {{ material }}
+                                </mat-option>
+                            </mat-autocomplete>
+                            <mat-hint>You can select from the list or type a new material</mat-hint>
+                            <mat-error *ngIf="hasFieldError('material')">
+                                {{ getFieldError('material') }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </fieldset>
+
+                <!-- Dimensions Section -->
+                <fieldset class="form-section" [attr.aria-labelledby]="'dimensions-title'">
+                    <legend class="section-title" id="dimensions-title">Dimensions</legend>
+
+                    <div class="form-row">
+                        <!-- Length -->
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Length (mm)</mat-label>
+                            <input matInput type="number" step="0.1" formControlName="lengthInMm"
+                                placeholder="Enter length in mm"
+                                [class.mat-form-field-invalid]="hasFieldError('lengthInMm')"
+                                [attr.aria-describedby]="hasFieldError('lengthInMm') ? 'lengthInMm-error' : null"
+                                [attr.aria-invalid]="hasFieldError('lengthInMm')">
+                            <mat-error *ngIf="hasFieldError('lengthInMm')" id="lengthInMm-error">
+                                {{ getFieldError('lengthInMm') }}
+                            </mat-error>
+                        </mat-form-field>
+
+                        <!-- Width -->
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Width (mm)</mat-label>
+                            <input matInput type="number" step="0.1" formControlName="widthInMm"
+                                placeholder="Enter width in mm"
+                                [class.mat-form-field-invalid]="hasFieldError('widthInMm')">
+                            <mat-error *ngIf="hasFieldError('widthInMm')">
+                                {{ getFieldError('widthInMm') }}
+                            </mat-error>
+                        </mat-form-field>
+
+                        <!-- Height -->
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Height (mm)</mat-label>
+                            <input matInput type="number" step="0.1" formControlName="heightInMm"
+                                placeholder="Enter height in mm"
+                                [class.mat-form-field-invalid]="hasFieldError('heightInMm')">
+                            <mat-error *ngIf="hasFieldError('heightInMm')">
+                                {{ getFieldError('heightInMm') }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </fieldset>
+
+                <!-- Weight Section -->
+                <fieldset class="form-section" [attr.aria-labelledby]="'weight-title'">
+                    <legend class="section-title" id="weight-title">Weight</legend>
+
+                    <div class="form-row">
+                        <!-- Net Weight -->
+                        <mat-form-field appearance="outline" class="form-field">
+                            <mat-label>Net Weight (g)</mat-label>
+                            <input matInput type="number" step="0.1" formControlName="netWeightInGramm"
+                                placeholder="Enter weight in grams"
+                                [class.mat-form-field-invalid]="hasFieldError('netWeightInGramm')">
+                            <mat-error *ngIf="hasFieldError('netWeightInGramm')">
+                                {{ getFieldError('netWeightInGramm') }}
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                </fieldset>
+
+                <!-- Form Actions -->
+                <div class="form-actions" role="group" [attr.aria-label]="'Form actions'">
+                    <button mat-button type="button" (click)="onCancel()" [disabled]="loading"
+                        [attr.aria-label]="'Cancel form and return to article list'">
+                        Cancel
+                    </button>
+
+                    <button mat-button type="button" (click)="onReset()" [disabled]="loading"
+                        [attr.aria-label]="'Reset form to original values'">
+                        <mat-icon aria-hidden="true">refresh</mat-icon>
+                        Reset
+                    </button>
+
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!isFormValid || loading"
+                        [attr.aria-label]="mode === 'create' ? 'Create new article' : 'Save article changes'">
+                        <mat-spinner *ngIf="loading" diameter="20" class="button-spinner"
+                            aria-hidden="true"></mat-spinner>
+                        <mat-icon *ngIf="!loading" aria-hidden="true">{{ mode === 'create' ? 'add' : 'save'
+                            }}</mat-icon>
+                        {{ submitButtonText }}
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</div>

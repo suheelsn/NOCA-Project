@@ -1,0 +1,134 @@
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #fafafa;
+}
+
+/* Header Styles */
+.app-header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.app-header mat-toolbar {
+    padding: 0 16px;
+    min-height: 64px;
+}
+
+.app-icon {
+    margin-right: 12px;
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+}
+
+.app-title {
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+/* Main Content */
+.app-main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: #fafafa;
+}
+
+.content-wrapper {
+    flex: 1;
+    padding: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* Footer */
+.app-footer {
+    background-color: #f5f5f5;
+    border-top: 1px solid #e0e0e0;
+    margin-top: auto;
+}
+
+.footer-content {
+    padding: 16px 24px;
+    text-align: center;
+    color: #666;
+    font-size: 12px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .app-header mat-toolbar {
+        padding: 0 12px;
+        min-height: 56px;
+    }
+
+    .app-title {
+        font-size: 18px;
+    }
+
+    .content-wrapper {
+        padding: 16px 12px;
+    }
+
+    .footer-content {
+        padding: 12px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .app-title {
+        font-size: 16px;
+    }
+
+    .content-wrapper {
+        padding: 12px 8px;
+    }
+}
+
+/* High Contrast Mode */
+@media (prefers-contrast: high) {
+    .app-header mat-toolbar {
+        border-bottom: 2px solid black;
+    }
+
+    .app-footer {
+        border-top: 2px solid black;
+    }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Focus Management */
+.app-header button:focus {
+    outline: 2px solid white;
+    outline-offset: 2px;
+}
+
+/* Loading State for Router Outlet */
+.content-wrapper:empty::before {
+    content: "Loading...";
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+    color: #666;
+    font-size: 16px;
+}

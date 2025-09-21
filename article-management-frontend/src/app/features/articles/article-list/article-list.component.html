@@ -1,0 +1,156 @@
+<div class="article-list-container">
+    <!-- Filter Component -->
+    <app-article-filter (filtersChanged)="onFiltersChanged($event)" (filtersCleared)="onFiltersCleared()">
+    </app-article-filter>
+
+    <mat-card role="region" [attr.aria-label]="'Article management dashboard'">
+        <mat-card-header>
+            <mat-card-title id="article-list-title">Article Management</mat-card-title>
+            <mat-card-subtitle>
+                Manage bicycle component articles
+                <span *ngIf="hasActiveFilters()" class="filter-indicator"
+                    [attr.aria-label]="'Showing filtered results. ' + getActiveFiltersCount() + ' filters active'">
+                    • Filtered results
+                </span>
+            </mat-card-subtitle>
+        </mat-card-header>
+
+        <mat-card-content>
+            <!-- Add New Article Button -->
+            <div class="actions-toolbar" role="toolbar" aria-label="Article actions">
+                <button mat-raised-button color="primary" (click)="onAddNew()" [attr.aria-label]="'Add new article'"
+                    type="button">
+                    <mat-icon aria-hidden="true">add</mat-icon>
+                    Add Article
+                </button>
+            </div>
+
+            <!-- Loading State -->
+            <div *ngIf="loading" class="loading-container" role="status"
+                [attr.aria-label]="'Loading articles, please wait'">
+                <mat-spinner diameter="50" aria-hidden="true"></mat-spinner>
+                <p>Loading articles...</p>
+            </div>
+
+            <!-- Error State -->
+            <div *ngIf="error && !loading" class="error-container" role="alert"
+                [attr.aria-label]="'Error loading articles: ' + error">
+                <mat-icon color="warn" aria-hidden="true">error</mat-icon>
+                <p>{{ error }}</p>
+                <button mat-button color="primary" (click)="loadArticles()" [attr.aria-label]="'Retry loading articles'"
+                    type="button">
+                    <mat-icon aria-hidden="true">refresh</mat-icon>
+                    Retry
+                </button>
+            </div>
+
+            <!-- Empty State -->
+            <div *ngIf="!loading && !error && articles.length === 0" class="empty-container" role="status"
+                [attr.aria-label]="'No articles found'">
+                <mat-icon aria-hidden="true">inventory_2</mat-icon>
+                <h3>No Articles Found</h3>
+                <p>There are no articles to display. Start by adding your first article.</p>
+                <button mat-raised-button color="primary" (click)="onAddNew()"
+                    [attr.aria-label]="'Add your first article'" type="button">
+                    <mat-icon aria-hidden="true">add</mat-icon>
+                    Add First Article
+                </button>
+            </div>
+
+            <!-- Articles Table -->
+            <div *ngIf="!loading && !error && articles.length > 0" class="table-container" role="region"
+                [attr.aria-label]="'Articles table with ' + articles.length + ' items'">
+                <table mat-table [dataSource]="articles" class="articles-table" role="table"
+                    [attr.aria-labelledby]="'article-list-title'" [attr.aria-rowcount]="articles.length + 1">
+
+                    <!-- Article Number Column -->
+                    <ng-container matColumnDef="articleNumber">
+                        <th mat-header-cell *matHeaderCellDef>Article Number</th>
+                        <td mat-cell *matCellDef="let article">{{ article.articleNumber }}</td>
+                    </ng-container>
+
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="name">
+                        <th mat-header-cell *matHeaderCellDef>Name</th>
+                        <td mat-cell *matCellDef="let article">{{ article.name }}</td>
+                    </ng-container>
+
+                    <!-- Article Category Column -->
+                    <ng-container matColumnDef="articleCategory">
+                        <th mat-header-cell *matHeaderCellDef [class.sortable]="isSortable('articleCategory')"
+                            (click)="onSort('articleCategory')" [attr.aria-sort]="getSortDirection('articleCategory')"
+                            matTooltip="Click to sort by Article Category">
+                            Article Category
+                            <mat-icon *ngIf="isSortable('articleCategory')" class="sort-icon">
+                                {{ getSortIcon('articleCategory') }}
+                            </mat-icon>
+                        </th>
+                        <td mat-cell *matCellDef="let article">{{ article.articleCategory }}</td>
+                    </ng-container>
+
+                    <!-- Bicycle Category Column -->
+                    <ng-container matColumnDef="bicycleCategory">
+                        <th mat-header-cell *matHeaderCellDef>Bicycle Category</th>
+                        <td mat-cell *matCellDef="let article">{{ article.bicycleCategory }}</td>
+                    </ng-container>
+
+                    <!-- Material Column -->
+                    <ng-container matColumnDef="material">
+                        <th mat-header-cell *matHeaderCellDef>Material</th>
+                        <td mat-cell *matCellDef="let article">{{ article.material }}</td>
+                    </ng-container>
+
+                    <!-- Length Column -->
+                    <ng-container matColumnDef="lengthInMm">
+                        <th mat-header-cell *matHeaderCellDef>Length (mm)</th>
+                        <td mat-cell *matCellDef="let article">{{ article.lengthInMm }}</td>
+                    </ng-container>
+
+                    <!-- Width Column -->
+                    <ng-container matColumnDef="widthInMm">
+                        <th mat-header-cell *matHeaderCellDef>Width (mm)</th>
+                        <td mat-cell *matCellDef="let article">{{ article.widthInMm }}</td>
+                    </ng-container>
+
+                    <!-- Height Column -->
+                    <ng-container matColumnDef="heightInMm">
+                        <th mat-header-cell *matHeaderCellDef>Height (mm)</th>
+                        <td mat-cell *matCellDef="let article">{{ article.heightInMm }}</td>
+                    </ng-container>
+
+                    <!-- Net Weight Column -->
+                    <ng-container matColumnDef="netWeightInGramm">
+                        <th mat-header-cell *matHeaderCellDef [class.sortable]="isSortable('netWeightInGramm')"
+                            (click)="onSort('netWeightInGramm')" [attr.aria-sort]="getSortDirection('netWeightInGramm')"
+                            matTooltip="Click to sort by Net Weight">
+                            Net Weight (g)
+                            <mat-icon *ngIf="isSortable('netWeightInGramm')" class="sort-icon">
+                                {{ getSortIcon('netWeightInGramm') }}
+                            </mat-icon>
+                        </th>
+                        <td mat-cell *matCellDef="let article">{{ article.netWeightInGramm }}</td>
+                    </ng-container>
+
+                    <!-- Actions Column -->
+                    <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef role="columnheader">Actions</th>
+                        <td mat-cell *matCellDef="let article" role="gridcell">
+                            <button mat-icon-button color="primary" (click)="onEdit(article)" matTooltip="Edit Article"
+                                [attr.aria-label]="'Edit article ' + article.name" type="button">
+                                <mat-icon aria-hidden="true">edit</mat-icon>
+                            </button>
+                            <button mat-icon-button color="warn" (click)="onDelete(article)" matTooltip="Delete Article"
+                                [attr.aria-label]="'Delete article ' + article.name" type="button">
+                                <mat-icon aria-hidden="true">delete</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns" role="row"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" role="row"
+                        [attr.aria-rowindex]="articles.indexOf(row) + 2"></tr>
+                </table>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>

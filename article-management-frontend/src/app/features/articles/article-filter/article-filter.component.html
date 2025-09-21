@@ -1,0 +1,106 @@
+<mat-card class="filter-card" role="region" [attr.aria-label]="'Article filters'">
+    <mat-card-header>
+        <mat-card-title id="filter-title">
+            <mat-icon aria-hidden="true">filter_list</mat-icon>
+            Filters
+            <span class="filter-count" *ngIf="hasActiveFilters()"
+                [attr.aria-label]="getActiveFiltersCount() + ' filters currently active'">
+                ({{ getActiveFiltersCount() }} active)
+            </span>
+        </mat-card-title>
+        <div class="spacer"></div>
+        <button mat-icon-button (click)="clearFilters()" [disabled]="!hasActiveFilters()" matTooltip="Clear all filters"
+            [attr.aria-label]="'Clear all active filters'" class="clear-button" type="button">
+            <mat-icon aria-hidden="true">clear</mat-icon>
+        </button>
+    </mat-card-header>
+
+    <mat-card-content>
+        <form [formGroup]="filterForm" class="filter-form" role="form" [attr.aria-labelledby]="'filter-title'">
+
+            <!-- Article Category Filter -->
+            <div class="filter-field" role="group" [attr.aria-labelledby]="'article-category-label'">
+                <label for="articleCategory" id="article-category-label">Article Category:</label>
+                <select id="articleCategory" formControlName="articleCategory" class="form-select"
+                    [attr.aria-describedby]="'article-category-help'"
+                    [attr.aria-label]="'Select article category to filter by'">
+                    <option value="">All Categories</option>
+                    <option *ngFor="let category of articleCategories" [value]="category">
+                        {{ category }}
+                    </option>
+                </select>
+                <div id="article-category-help" class="sr-only">
+                    Filter articles by their category. Select 'All Categories' to show all articles.
+                </div>
+            </div>
+
+            <!-- Bicycle Category Filter (Multi-select with checkboxes) -->
+            <div class="filter-field" role="group" [attr.aria-labelledby]="'bicycle-category-label'"
+                [attr.aria-describedby]="'bicycle-category-help'">
+                <label id="bicycle-category-label">Bicycle Categories:</label>
+                <div class="checkbox-group" role="group" [attr.aria-label]="'Select bicycle categories to filter by'">
+                    <div class="checkbox-item" *ngFor="let category of bicycleCategories; trackBy: trackByCategory">
+                        <input type="checkbox" [id]="'bicycle-' + category" [value]="category"
+                            (change)="onBicycleCategoryChange(category, $event)"
+                            [checked]="isBicycleCategorySelected(category)" class="checkbox-input"
+                            [attr.aria-describedby]="'bicycle-category-help'">
+                        <label [for]="'bicycle-' + category" class="checkbox-label">
+                            {{ category }}
+                        </label>
+                    </div>
+                </div>
+                <p id="bicycle-category-help" class="help-text">Select multiple categories to filter articles</p>
+            </div>
+
+            <!-- Material Filter -->
+            <div class="filter-field" role="group" [attr.aria-labelledby]="'material-label'">
+                <label for="material" id="material-label">Material:</label>
+                <select id="material" formControlName="material" class="form-select"
+                    [attr.aria-describedby]="'material-help'" [attr.aria-label]="'Select material to filter by'">
+                    <option value="">All Materials</option>
+                    <option *ngFor="let material of materials" [value]="material">
+                        {{ material }}
+                    </option>
+                </select>
+                <div id="material-help" class="sr-only">
+                    Filter articles by their material. Select 'All Materials' to show all articles.
+                </div>
+            </div>
+
+        </form>
+
+        <!-- Active Filters Display -->
+        <div class="active-filters" *ngIf="hasActiveFilters()" role="region"
+            [attr.aria-label]="'Currently active filters'">
+            <h4 id="active-filters-title">Active Filters:</h4>
+            <div class="filter-tags" role="list" [attr.aria-labelledby]="'active-filters-title'">
+                <span class="filter-tag" *ngIf="filterForm.get('articleCategory')?.value" role="listitem">
+                    Article: {{ filterForm.get('articleCategory')?.value }}
+                    <button type="button" class="remove-tag" (click)="filterForm.patchValue({articleCategory: ''})"
+                        [attr.aria-label]="'Remove article category filter: ' + filterForm.get('articleCategory')?.value">
+                        &times;
+                    </button>
+                </span>
+
+                <span class="filter-tag"
+                    *ngFor="let category of filterForm.get('bicycleCategories')?.value || []; trackBy: trackByCategory"
+                    role="listitem">
+                    Bicycle: {{ category }}
+                    <button type="button" class="remove-tag" (click)="removeBicycleCategory(category)"
+                        [attr.aria-label]="'Remove bicycle category filter: ' + category">
+                        &times;
+                    </button>
+                </span>
+
+                <span class="filter-tag" *ngIf="filterForm.get('material')?.value" role="listitem">
+                    Material: {{ filterForm.get('material')?.value }}
+                    <button type="button" class="remove-tag" (click)="filterForm.patchValue({material: ''})"
+                        [attr.aria-label]="'Remove material filter: ' + filterForm.get('material')?.value">
+                        &times;
+                    </button>
+                </span>
+            </div>
+        </div>
+
+    </mat-card-content>
+</mat-card>

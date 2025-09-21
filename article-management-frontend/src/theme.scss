@@ -1,0 +1,122 @@
+// Custom Angular Material Theme Configuration
+@use '@angular/material' as mat;
+
+// Include the common styles for Angular Material
+@include mat.core();
+
+// Define custom color palettes
+$custom-primary: mat.define-palette(mat.$indigo-palette, 500, 100, 900);
+$custom-accent: mat.define-palette(mat.$pink-palette, A200, A100, A400);
+$custom-warn: mat.define-palette(mat.$red-palette);
+
+// Create the theme object
+$custom-theme: mat.define-light-theme((color: (primary: $custom-primary,
+                accent: $custom-accent,
+                warn: $custom-warn,
+            ),
+            typography: mat.define-typography-config($font-family: '"Roboto", "Helvetica Neue", sans-serif',
+                $headline-1: mat.define-typography-level(2rem, 2.5rem, 300),
+                $headline-2: mat.define-typography-level(1.75rem, 2.25rem, 400),
+                $headline-3: mat.define-typography-level(1.5rem, 2rem, 400),
+                $headline-4: mat.define-typography-level(1.25rem, 1.75rem, 500),
+                $headline-5: mat.define-typography-level(1.125rem, 1.5rem, 500),
+                $headline-6: mat.define-typography-level(1rem, 1.5rem, 500),
+                $body-1: mat.define-typography-level(1rem, 1.5rem, 400),
+                $body-2: mat.define-typography-level(0.875rem, 1.25rem, 400),
+                $caption: mat.define-typography-level(0.75rem, 1rem, 400),
+                $button: mat.define-typography-level(0.875rem, 1rem, 500),
+            ),
+            density: 0,
+        ));
+
+// Include theme styles for core and each component used in your app
+@include mat.all-component-themes($custom-theme);
+
+// Custom CSS variables for consistent theming
+:root {
+    --primary-color: #{mat.get-color-from-palette($custom-primary, 500)};
+    --primary-light: #{mat.get-color-from-palette($custom-primary, 100)};
+    --primary-dark: #{mat.get-color-from-palette($custom-primary, 900)};
+    --accent-color: #{mat.get-color-from-palette($custom-accent, A200)};
+    --warn-color: #{mat.get-color-from-palette($custom-warn, 500)};
+
+    // Semantic colors
+    --success-color: #4caf50;
+    --info-color: #2196f3;
+    --warning-color: #ff9800;
+    --error-color: #f44336;
+
+    // Neutral colors
+    --background-color: #fafafa;
+    --surface-color: #ffffff;
+    --text-primary: rgba(0, 0, 0, 0.87);
+    --text-secondary: rgba(0, 0, 0, 0.6);
+    --text-disabled: rgba(0, 0, 0, 0.38);
+    --divider-color: rgba(0, 0, 0, 0.12);
+
+    // Spacing
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-xxl: 48px;
+
+    // Border radius
+    --border-radius-sm: 4px;
+    --border-radius-md: 8px;
+    --border-radius-lg: 12px;
+
+    // Shadows
+    --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    --shadow-md: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+    --shadow-lg: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+
+    // Transitions
+    --transition-fast: 0.15s ease-in-out;
+    --transition-normal: 0.3s ease-in-out;
+    --transition-slow: 0.5s ease-in-out;
+}
+
+// Dark theme support
+@media (prefers-color-scheme: dark) {
+    :root {
+        --background-color: #303030;
+        --surface-color: #424242;
+        --text-primary: rgba(255, 255, 255, 0.87);
+        --text-secondary: rgba(255, 255, 255, 0.6);
+        --text-disabled: rgba(255, 255, 255, 0.38);
+        --divider-color: rgba(255, 255, 255, 0.12);
+    }
+}
+
+// High contrast theme support
+@media (prefers-contrast: high) {
+    :root {
+        --primary-color: #000080;
+        --accent-color: #ff0080;
+        --warn-color: #cc0000;
+        --success-color: #006600;
+        --info-color: #0066cc;
+        --warning-color: #cc6600;
+        --error-color: #cc0000;
+        --text-primary: #000000;
+        --text-secondary: #000000;
+        --divider-color: #000000;
+    }
+
+    .mat-mdc-card,
+    .mat-mdc-form-field,
+    .mat-mdc-button {
+        border: 2px solid var(--text-primary) !important;
+    }
+}
+
+// Reduced motion support
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
